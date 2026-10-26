@@ -65,9 +65,18 @@ It is plain static files, so anything works. Whichever you pick, serve it
 over **HTTPS** on a domain you control and make sure `/privacy/` and
 `/terms/` are reachable by anyone without signing in.
 
-- **Cloudflare Pages / Netlify / Vercel:** connect the repository, root
-  directory `website`, build command `npm run build`, output `dist`. Set
-  `SITE_URL` to your address.
+- **Vercel:** import the repository and set **Root Directory** to `website`.
+  `website/vercel.json` supplies the rest (install `npm ci`, build
+  `npm run build`, output **`dist`**, trailing-slash URLs, security headers
+  including a strict Content-Security-Policy, long caching for assets and
+  fonts). If a project already exists with the wrong output directory (the
+  error "No Output Directory named build"), either redeploy with this file
+  or set Settings -> Build and Deployment -> Output Directory to `dist`. Add
+  an environment variable `SITE_URL` = your address (no trailing slash).
+- **Cloudflare Pages / Netlify:** connect the repository, root directory
+  `website`, build command `npm run build`, output `dist`, and set
+  `SITE_URL`. (`vercel.json` is ignored there; add equivalent headers if you
+  want them.)
 - **GitHub Pages:** the `Website` workflow (`.github/workflows/website.yml`)
   builds the site and attaches `recipai-website` as an artifact; publish its
   contents with your Pages setup. A project site needs `SITE_BASE=/recipai/`.
