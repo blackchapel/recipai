@@ -428,6 +428,39 @@ cards, tag suggestions, substitutions) may be added later. When it is:
   but only runs on recent high-end phones, so it can only ever be an
   enhancement.
 
+## Website (`website/`)
+
+A separate, small project in the same repository (not part of the Gradle
+build): React 19 + TypeScript + Vite, three pages, no runtime
+dependencies besides React. It is the public home page, privacy policy
+and terms of service that Google's OAuth consent screen links to.
+
+- Routes `/`, `/privacy/`, `/terms/` (and `404.html`), each **prerendered**
+  to its own HTML file by `scripts/prerender.mjs` (client build, `vite build
+  --ssr`, then `renderToString` per route), so any static host serves them
+  and crawlers read real text; the client then hydrates. A ~40-line router
+  (`src/router.tsx`) handles in-site links with the History API and an
+  optional base path (`SITE_BASE`).
+- Look: the app's tokens ported to CSS variables in `src/styles.css`
+  (dark default, light via `prefers-color-scheme`), the app's fonts
+  (Bricolage Grotesque, Geist, Geist Mono, Latin subset as WOFF2 in
+  `public/fonts`, OFL licenses beside them), the launcher mark as SVG,
+  and illustrations rebuilt from the first-run tour's art
+  (`src/components/Art.tsx`), including an interactive scale demo.
+- Privacy by construction: no cookies, no storage, no analytics, no
+  third-party requests (checked with a headless browser: every request is
+  to the site itself).
+- `src/config.ts` holds the stated facts (repo/release links, license,
+  contact, policy date). `src/pages/Privacy.tsx` states what the app
+  stores, sends and to whom (Drive `drive.file`, link import, the GitHub
+  release check, permissions, retention) and carries Google's Limited Use
+  statement; it must be kept in step with this document.
+- CI: `.github/workflows/website.yml` builds it on pushes touching
+  `website/` and uploads `recipai-website` (the `dist/` folder).
+- Hosting and the Google OAuth submission are the owner's: see
+  `website/README.md` and "Publishing the OAuth consent screen" in
+  `docs/RELEASING.md`.
+
 ## Release pipeline (as it exists)
 
 Two manual (`workflow_dispatch`) workflows, mirroring the RideLink repo.

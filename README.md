@@ -134,6 +134,20 @@ Things only a phone can check: haptics, timers with the screen off and
 their notifications, the photo picker, the back swipe, and Google Drive
 backup (which also needs the OAuth client from `docs/RELEASING.md`).
 
+## Website
+
+`website/` is the project's public site: a home page, a privacy policy and
+terms of service, in one small React app that builds to static HTML and
+matches the app's look in light and dark. It is what Google's OAuth
+consent screen links to. No cookies, analytics or third-party requests.
+See `website/README.md` to run, build and host it.
+
+## License
+
+Recipai is free software under the **GNU General Public License, version 3
+or later** (`LICENSE`). Bundled fonts are under the SIL Open Font License
+(`third_party/fonts/`).
+
 ## Releasing
 
 Merge approved PRs into `main`, then Actions -> **Production Release** ->

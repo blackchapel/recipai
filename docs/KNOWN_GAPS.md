@@ -48,6 +48,26 @@ part of the change that touches them -- see `CLAUDE.md`.
   the compile and by reading the code; spacing on small phones (the art
   scales down to fit) and in both themes needs a look on a device.
 
+## Website and legal pages
+
+- **Not legal advice.** The privacy policy and terms were written from
+  how the app works, not by a lawyer, and the terms name no governing law
+  or court. Have them reviewed if that matters.
+- **The policy can drift from the app.** `website/src/pages/Privacy.tsx`
+  must be updated in the same change as anything that alters what data
+  the app stores, sends or shares (`CLAUDE.md` says so). Nothing checks it
+  automatically.
+- **No contact email is published.** The pages point to GitHub issues;
+  set `contactEmail` in `website/src/config.ts` to add one. Google may
+  want a monitored email for the consent screen anyway (that one is entered
+  in the console and is not shown on the site).
+- **The site assumes a public repository** (download, source and issue
+  links, the app's update check) and a custom domain for OAuth.
+- **The site is not deployed by this repository.** The workflow only builds
+  it; hosting, DNS and the Search Console domain verification are the
+  owner's.
+- **Illustrations are web re-creations** of the app's art, not exports of it.
+
 ## Update check
 
 - **Needs a public repository.** The check is anonymous. While the repo

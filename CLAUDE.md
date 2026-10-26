@@ -39,6 +39,12 @@ or repeating work already flagged as a gap:
 - `docs/RELEASING.md` -- signing secrets and how to cut a release. Only
   needs a read when touching the pipeline.
 
+A change to what data the app stores, sends, or shares (a new network
+call, permission, SDK, or something added to a backup) also updates
+`website/src/pages/Privacy.tsx` and `policyUpdated` in
+`website/src/config.ts` in the same PR: Google's OAuth consent screen
+points at that policy, and it must stay true.
+
 Then, any change that touches app behavior, the build, or the release
 pipeline updates `README.md`, `docs/SYSTEM_STATE.md` and
 `docs/KNOWN_GAPS.md` in the same branch/PR -- don't let them drift. That
