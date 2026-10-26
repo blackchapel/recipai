@@ -128,7 +128,7 @@ export function Home() {
             <p>
               Connect your Google account and Recipai saves your recipes, photos and settings to a “Recipai backups”
               folder in <em>your</em> Drive, daily, weekly or when you tap. The six newest backups are kept, and you
-              can restore any of them. Skip it and nothing ever leaves your phone.
+              can restore any of them. Skip it and your recipes never leave your phone.
             </p>
             <ul className="ticks">
               <li>
@@ -143,7 +143,7 @@ export function Home() {
                 <Icon name="lock" size={18} />
                 <span>
                   <b>No server of ours.</b> Backups go from your phone straight to Google. We never receive them, and
-                  nobody else can read them.
+                  nobody on the Recipai team can read them: they sit in your own Drive.
                 </span>
               </li>
               <li>
@@ -178,7 +178,7 @@ export function Home() {
           <p className="prose-lead">
             Recipai has no sign-up and no servers. Recipes, photos and settings live in the app's private storage. The
             only network use is the link you ask it to import, Google Drive if you connect it, and a quiet check of the
-            latest GitHub release when the app opens. The <Link to="/privacy">privacy policy</Link> spells out each one.
+            latest GitHub release when the app is opened. The <Link to="/privacy">privacy policy</Link> spells out each one.
           </p>
         </div>
       </section>

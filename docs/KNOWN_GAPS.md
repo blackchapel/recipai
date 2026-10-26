@@ -57,6 +57,11 @@ part of the change that touches them -- see `CLAUDE.md`.
   must be updated in the same change as anything that alters what data
   the app stores, sends or shares (`CLAUDE.md` says so). Nothing checks it
   automatically.
+- **The permissions table was checked against the app's own manifest, not
+  the merged one.** Libraries add permissions at build time (WorkManager
+  adds `RECEIVE_BOOT_COMPLETED`, listed on the page). Inspect the release
+  APK's merged manifest once (`aapt2 dump permissions`, or the build's
+  `processReleaseManifest` output) and make the table match exactly.
 - **No contact email is published.** The pages point to GitHub issues;
   set `contactEmail` in `website/src/config.ts` to add one. Google may
   want a monitored email for the consent screen anyway (that one is entered

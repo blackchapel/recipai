@@ -139,8 +139,8 @@ const sections: LegalSection[] = [
     title: "Third-party services",
     body: (
       <p>
-        The app can talk to services we don't control: Google (sign-in and Drive), GitHub (release checks and
-        downloads), and the recipe websites you ask it to read. Those services have their own terms and privacy
+        The app can talk to services we don't control: Google (sign-in and Drive), GitHub (release checks; you download
+        updates from its releases page yourself), and the recipe websites you ask it to read. Those services have their own terms and privacy
         policies, and we are not responsible for them. Recipai is not affiliated with or endorsed by Google or GitHub.
       </p>
     ),
