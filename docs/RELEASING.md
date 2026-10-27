@@ -68,10 +68,53 @@ keytool -list -v -keystore recipai-release.jks -alias recipai | grep SHA1
 Test and production builds share the same key and package, so one OAuth
 client covers both.
 
+### Publishing the OAuth consent screen
+
+While the consent screen is in "Testing", only the test users you list can
+connect Drive. To let anyone connect, publish it (and, where Google asks,
+get the branding verified). Recipai requests a single scope,
+`.../auth/drive.file`, which Google classes as **non-sensitive**, so no
+scope-justification video or security assessment should be needed; what
+Google checks is the branding and the pages below. The console's own
+checklist is the authority if it differs from this list.
+
+1. **Host the site** in `website/` (see `website/README.md`) on a domain you
+   control, over HTTPS. Use a custom domain: a shared address such as
+   `*.github.io` is often rejected because you can't prove you own it.
+   Build with `SITE_URL` set. Confirm `/`, `/privacy/` and `/terms/` open
+   without signing in.
+2. **Verify the domain** in Google Search Console (a DNS record is the most
+   reliable way), as the same Google account that owns the Cloud project, or
+   one that is an owner/editor of it.
+3. **Google Cloud console -> Google Auth Platform** (older UI: APIs &
+   Services -> OAuth consent screen):
+   - **Branding:** app name `Recipai` (must match the site's name), user
+     support email, app logo (square, 120x120 px or larger, from the app icon
+     in `android/src/main/res/drawable/ic_launcher_foreground.xml` / the site's
+     `favicon.svg`), **Application home page** = `https://<your domain>/`,
+     **Privacy policy** = `https://<your domain>/privacy/`, **Terms of
+     service** = `https://<your domain>/terms/`, **Authorized domains** = your
+     domain, **Developer contact email**.
+   - **Audience:** External, then **Publish app** (status: In production).
+   - **Data Access:** add only `.../auth/drive.file`.
+4. **Submit for verification** if the console asks (it appears as a
+   "Verification center" prompt). Answer with: Recipai is an open-source
+   recipe app; it uses `drive.file` to create a "Recipai backups" folder in the
+   user's own Drive and store backups there, to list/download/delete only
+   those files, and to show the connected account's name and email; nothing
+   is sent to the developers. Link the policy section "Google user data:
+   access, use, sharing and Limited Use".
+5. Reply to any email from Google's verification team; they typically check
+   that the home page describes the app, links to the privacy policy, and
+   that the policy discloses the Google data use and Limited Use language.
+
+The Android OAuth client (package + SHA-1, step 3 above) is unaffected by
+publishing.
+
 ## Day to day
 
 1. Work on a feature branch (never `main`).
-2. Push it. Actions -> **Test Release** -> Run workflow -> enter the
+2. Push it. Actions -> **Android Test Release** -> Run workflow -> enter the
    branch. Download the APK from the run's **Artifacts** and install it.
 3. When you've tested and approved it, a PR is opened into `main`
    (labelled `feature`, `fix`, `docs`, `chore` ... so release notes
@@ -80,10 +123,10 @@ client covers both.
 
 ## Cutting a release
 
-Actions -> **Production Release** -> Run workflow, with **`main`**
+Actions -> **Android Production Release** -> Run workflow, with **`main`**
 selected as the branch. It:
 
-1. Works out the version: `MAJOR.MINOR` from `app/version.properties`
+1. Works out the version: `MAJOR.MINOR` from `android/version.properties`
    plus the next patch for that line (`0.1.0`, then `0.1.1`, ...).
 2. Runs the unit tests and builds the signed APK.
 3. Creates the tag `v<version>` and a GitHub Release with

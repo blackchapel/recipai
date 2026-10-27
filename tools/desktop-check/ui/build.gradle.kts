@@ -9,7 +9,7 @@ plugins {
 java { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
 kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }
 
-val app = rootDir.resolve("../../app/src").canonicalFile
+val app = rootDir.resolve("../../android/src").canonicalFile
 val stubs = rootDir.resolve("stubs").canonicalFile
 
 // Android-only code: never compiled here. Everything in a `platform`
@@ -29,7 +29,7 @@ val excludeAndroidOnly = Spec<FileTreeElement> {
 sourceSets["main"].kotlin.srcDir(app.resolve("main/java"))
 sourceSets["main"].kotlin.srcDir(stubs)
 sourceSets["main"].kotlin.exclude(excludeAndroidOnly)
-// The app's JVM unit tests (app/src/test) run here too.
+// The app's JVM unit tests (android/src/test) run here too.
 sourceSets["test"].kotlin.srcDir(app.resolve("test/java"))
 sourceSets["test"].kotlin.exclude(excludeAndroidOnly)
 

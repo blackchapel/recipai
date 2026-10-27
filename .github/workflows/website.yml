@@ -1,0 +1,58 @@
+name: Website
+
+# Builds the static site in website/ (home, privacy policy, terms) so a broken
+# change is caught, and attaches the result as an artifact you can host.
+# Runs on pushes that touch website/, or on demand with your address filled in.
+on:
+  push:
+    paths:
+      - "website/**"
+      - ".github/workflows/website.yml"
+  workflow_dispatch:
+    inputs:
+      site_url:
+        description: "Public address, e.g. https://recipai.example.org (no trailing slash; optional)"
+        required: false
+        default: ""
+        type: string
+      site_base:
+        description: "Path the site is served from (/ for a domain of its own, /recipai/ for a GitHub Pages project site)"
+        required: false
+        default: "/"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        env:
+          SITE_URL: ${{ inputs.site_url }}
+          SITE_BASE: ${{ inputs.site_base }}
+        run: npm run build
+
+      - name: Upload the site
+        uses: actions/upload-artifact@v4
+        with:
+          name: recipai-website
+          path: website/dist
+          if-no-files-found: error

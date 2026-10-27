@@ -10,7 +10,7 @@ part of the change that touches them -- see `CLAUDE.md`.
   sandbox cannot reach Google's Maven repository or the Android SDK. M1
   passed one Test Release; everything since (the six modules) was
   checked only by `tools/desktop-check` (the shared Compose code against
-  Compose Desktop 1.7.0, plus `:core` and `app/src/test` on the JVM).
+  Compose Desktop 1.7.0, plus `:core` and `android/src/test` on the JVM).
   The Android-only files were reviewed by hand against the pinned
   library versions but never compiled: `MainActivity`, `MainViewModel`,
   `DataStoreSettings`, `Haptics`, `Fonts`, `Icons`, `ui/Platform.kt`,
@@ -47,6 +47,31 @@ part of the change that touches them -- see `CLAUDE.md`.
 - **Illustrations are unrendered.** The three pages are checked only by
   the compile and by reading the code; spacing on small phones (the art
   scales down to fit) and in both themes needs a look on a device.
+
+## Website and legal pages
+
+- **Not legal advice.** The privacy policy and terms were written from
+  how the app works, not by a lawyer, and the terms name no governing law
+  or court. Have them reviewed if that matters.
+- **The policy can drift from the app.** `website/src/pages/Privacy.tsx`
+  must be updated in the same change as anything that alters what data
+  the app stores, sends or shares (`CLAUDE.md` says so). Nothing checks it
+  automatically.
+- **The permissions table was checked against the app's own manifest, not
+  the merged one.** Libraries add permissions at build time (WorkManager
+  adds `RECEIVE_BOOT_COMPLETED`, listed on the page). Inspect the release
+  APK's merged manifest once (`aapt2 dump permissions`, or the build's
+  `processReleaseManifest` output) and make the table match exactly.
+- **No contact email is published.** The pages point to GitHub issues;
+  set `contactEmail` in `website/src/config.ts` to add one. Google may
+  want a monitored email for the consent screen anyway (that one is entered
+  in the console and is not shown on the site).
+- **The site assumes a public repository** (download, source and issue
+  links, the app's update check) and a custom domain for OAuth.
+- **The site is not deployed by this repository.** The workflow only builds
+  it; hosting, DNS and the Search Console domain verification are the
+  owner's.
+- **Illustrations are web re-creations** of the app's art, not exports of it.
 
 ## Update check
 

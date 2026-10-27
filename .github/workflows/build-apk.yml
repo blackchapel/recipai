@@ -1,4 +1,4 @@
-name: Test Release
+name: Android Test Release
 
 # Manual, on demand: builds a signed APK from any branch so it can be
 # installed and tested before a PR is opened. Never publishes a release.
@@ -60,7 +60,7 @@ jobs:
       - name: Compute version
         id: version
         run: |
-          BASE_VERSION=$(grep '^VERSION_NAME=' app/version.properties | cut -d'=' -f2 | tr -d '[:space:]')
+          BASE_VERSION=$(grep '^VERSION_NAME=' android/version.properties | cut -d'=' -f2 | tr -d '[:space:]')
           COMMIT_COUNT=$(git rev-list --count HEAD)
           SHORT_SHA=$(git rev-parse --short HEAD)
           SAFE_BRANCH=$(echo '${{ inputs.branch }}' | tr '/' '-')
@@ -94,7 +94,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: recipai-test-${{ steps.version.outputs.safe_branch }}-${{ steps.version.outputs.version_name }}
-          path: app/build/outputs/apk/release/app-release.apk
+          path: android/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
 
   notify:
