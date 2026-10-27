@@ -5,7 +5,7 @@ import com.blackchapel.recipai.core.UpdateResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-// Same API as app/.../platform/net/UpdateFetcher.kt, without android.net.TrafficStats.
+// Same API as android/.../platform/net/UpdateFetcher.kt, without android.net.TrafficStats.
 object UpdateFetcher {
     private val checker = UpdateChecker()
 

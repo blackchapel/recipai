@@ -3,7 +3,7 @@ import { Icon } from "./Icon";
 
 /**
  * Illustrations drawn from the app's own pieces (the first-run tour's art,
- * app/.../ui/welcome/WelcomeArt.kt) so they match the real screens and follow
+ * android/.../ui/welcome/WelcomeArt.kt) so they match the real screens and follow
  * light and dark through the same tokens.
  */
 

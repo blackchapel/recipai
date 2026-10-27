@@ -1,4 +1,4 @@
-/** The app's line icons (app/src/main/res/drawable/ic_*.xml), as inline SVG. */
+/** The app's line icons (android/src/main/res/drawable/ic_*.xml), as inline SVG. */
 const paths = {
   spark: ["M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z", "M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"],
   timer: ["M10 2h4M12 14l3-3", "M4 14a8 8 0 1 0 16 0a8 8 0 1 0-16 0"],

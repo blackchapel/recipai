@@ -10,7 +10,7 @@ part of the change that touches them -- see `CLAUDE.md`.
   sandbox cannot reach Google's Maven repository or the Android SDK. M1
   passed one Test Release; everything since (the six modules) was
   checked only by `tools/desktop-check` (the shared Compose code against
-  Compose Desktop 1.7.0, plus `:core` and `app/src/test` on the JVM).
+  Compose Desktop 1.7.0, plus `:core` and `android/src/test` on the JVM).
   The Android-only files were reviewed by hand against the pinned
   library versions but never compiled: `MainActivity`, `MainViewModel`,
   `DataStoreSettings`, `Haptics`, `Fonts`, `Icons`, `ui/Platform.kt`,

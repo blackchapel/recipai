@@ -9,7 +9,7 @@ real Android compiler.
 ./gradlew -p tools/desktop-check :core:test :ui:compileKotlin :ui:test
 ```
 
-How it works: `:ui` compiles `app/src/main/java` against Compose
+How it works: `:ui` compiles `android/src/main/java` against Compose
 Multiplatform Desktop 1.7.0, whose APIs match the app's Compose BOM
 (Compose 1.7, Material3 1.3). Android-only code is excluded (see the list
 in `ui/build.gradle.kts`): anything in a `platform` package, plus a few

@@ -1,4 +1,4 @@
-name: Production Release
+name: Android Production Release
 
 # Manual, on demand, and only from main: builds the signed APK, tags it
 # v<major>.<minor>.<patch> and publishes a GitHub Release with generated
@@ -49,7 +49,7 @@ jobs:
       - name: Compute version
         id: version
         run: |
-          BASE_VERSION=$(grep '^VERSION_NAME=' app/version.properties | cut -d'=' -f2 | tr -d '[:space:]')
+          BASE_VERSION=$(grep '^VERSION_NAME=' android/version.properties | cut -d'=' -f2 | tr -d '[:space:]')
           COMMIT_COUNT=$(git rev-list --count HEAD)
 
           # Next patch = 1 + the highest existing v<major.minor>.<patch> tag
@@ -99,7 +99,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
-          path: app/build/outputs/apk/release/app-release.apk
+          path: android/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 1
 
@@ -118,10 +118,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: release-apk
-          path: app/build/outputs/apk/release/
+          path: android/build/outputs/apk/release/
 
       - name: Name the APK for the release
-        run: mv app/build/outputs/apk/release/app-release.apk "app/build/outputs/apk/release/recipai-${{ needs.build.outputs.tag_name }}.apk"
+        run: mv android/build/outputs/apk/release/app-release.apk "android/build/outputs/apk/release/recipai-${{ needs.build.outputs.tag_name }}.apk"
 
       - name: Create GitHub Release
         id: release
@@ -130,7 +130,7 @@ jobs:
           tag_name: ${{ needs.build.outputs.tag_name }}
           name: ${{ needs.build.outputs.tag_name }}
           generate_release_notes: true
-          files: app/build/outputs/apk/release/recipai-${{ needs.build.outputs.tag_name }}.apk
+          files: android/build/outputs/apk/release/recipai-${{ needs.build.outputs.tag_name }}.apk
 
   notify:
     needs: [build, release]

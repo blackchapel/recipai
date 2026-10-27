@@ -40,8 +40,8 @@ Android-only files have only been reviewed, never compiled.
   and additive, and put new `AppController` members in a section at the
   end of the class headed `// ---- <module> ----`.
 - **Do not edit** `README.md`, `docs/SYSTEM_STATE.md`,
-  `docs/KNOWN_GAPS.md`, `docs/DESIGN.md`, `app/build.gradle.kts`,
-  `core/build.gradle.kts`, `.github/`, `app/version.properties`. Report
+  `docs/KNOWN_GAPS.md`, `docs/DESIGN.md`, `android/build.gradle.kts`,
+  `core/build.gradle.kts`, `.github/`, `android/version.properties`. Report
   doc changes and gaps in your hand-back; the coordinator writes the docs.
   The dependencies and permissions every module needs are already in
   place (Coil, ExifInterface, play-services-auth, WorkManager; INTERNET,
@@ -57,7 +57,7 @@ Android-only files have only been reviewed, never compiled.
   `./gradlew --no-daemon -p tools/desktop-check :core:test :ui:compileKotlin :ui:test`
   must pass. Android-only files can only be reviewed: check every
   import and signature against the library versions in
-  `app/build.gradle.kts` (Compose BOM 2024.10.01, activity 1.9.2,
+  `android/build.gradle.kts` (Compose BOM 2024.10.01, activity 1.9.2,
   lifecycle 2.8.6, core-ktx 1.13.1, play-services-auth 21.2.0, work
   2.9.1, coil 2.7.0, compileSdk 35, minSdk 26).
 - **Haptics:** every interaction names a `HapticType` (see DESIGN.md).

@@ -12,6 +12,22 @@ up to your own Google Drive.
 > on a phone yet; see `docs/KNOWN_GAPS.md`. `docs/SYSTEM_STATE.md` says
 > exactly what exists.
 
+## Repository layout
+
+One repository, several projects side by side:
+
+| Folder | What |
+|---|---|
+| `android/` | The Android app (Kotlin + Jetpack Compose) |
+| `core/` | Shared pure-Kotlin module: recipe model, scaling, importers, backup format, Drive client |
+| `website/` | The public site: home, privacy policy, terms (React, static) |
+| `tools/desktop-check/` | Compose Desktop harness that compiles and tests the shared UI code without the Android SDK |
+| `docs/` | Design, system state, known gaps, releasing |
+
+The Android app and `core` build together from the repository root
+(`./gradlew ...`). A server for AI-assisted import is planned as
+`server/`; it will join the same Gradle build so it can reuse `core`.
+
 ## What it does
 
 - **Library:** browse recipes in a grid or list; search, filter by tag
@@ -96,7 +112,7 @@ records where the app deliberately differs.
 Kotlin and Jetpack Compose, Android only, native. Min SDK 26. Two
 modules: `core` (plain Kotlin with unit tests: scaling, the importers,
 page reading and fetching, the editor's draft rules, timers, photo
-rules, the backup format and Drive client) and `app` (the Android UI and
+rules, the backup format and Drive client) and `app` (in `android/`: the Android UI and
 platform glue). Recipes are stored as a JSON file on the phone, photos
 as JPEGs beside it, settings in DataStore. See `docs/SYSTEM_STATE.md`.
 
@@ -126,7 +142,7 @@ local release build. See `docs/RELEASING.md`.
 ## Testing a change
 
 1. Push your feature branch.
-2. GitHub -> Actions -> **Test Release** -> Run workflow -> enter the
+2. GitHub -> Actions -> **Android Test Release** -> Run workflow -> enter the
    branch name.
 3. Download the APK from the run's artifacts and install it.
 
@@ -150,7 +166,7 @@ or later** (`LICENSE`). Bundled fonts are under the SIL Open Font License
 
 ## Releasing
 
-Merge approved PRs into `main`, then Actions -> **Production Release** ->
+Merge approved PRs into `main`, then Actions -> **Android Production Release** ->
 Run workflow (on `main`). It tags `v<major>.<minor>.<patch>`, builds the
 signed APK and publishes a GitHub Release. Details in
 `docs/RELEASING.md`.

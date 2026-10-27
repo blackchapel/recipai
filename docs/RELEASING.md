@@ -90,7 +90,7 @@ checklist is the authority if it differs from this list.
    Services -> OAuth consent screen):
    - **Branding:** app name `Recipai` (must match the site's name), user
      support email, app logo (square, 120x120 px or larger, from the app icon
-     in `app/src/main/res/drawable/ic_launcher_foreground.xml` / the site's
+     in `android/src/main/res/drawable/ic_launcher_foreground.xml` / the site's
      `favicon.svg`), **Application home page** = `https://<your domain>/`,
      **Privacy policy** = `https://<your domain>/privacy/`, **Terms of
      service** = `https://<your domain>/terms/`, **Authorized domains** = your
@@ -114,7 +114,7 @@ publishing.
 ## Day to day
 
 1. Work on a feature branch (never `main`).
-2. Push it. Actions -> **Test Release** -> Run workflow -> enter the
+2. Push it. Actions -> **Android Test Release** -> Run workflow -> enter the
    branch. Download the APK from the run's **Artifacts** and install it.
 3. When you've tested and approved it, a PR is opened into `main`
    (labelled `feature`, `fix`, `docs`, `chore` ... so release notes
@@ -123,10 +123,10 @@ publishing.
 
 ## Cutting a release
 
-Actions -> **Production Release** -> Run workflow, with **`main`**
+Actions -> **Android Production Release** -> Run workflow, with **`main`**
 selected as the branch. It:
 
-1. Works out the version: `MAJOR.MINOR` from `app/version.properties`
+1. Works out the version: `MAJOR.MINOR` from `android/version.properties`
    plus the next patch for that line (`0.1.0`, then `0.1.1`, ...).
 2. Runs the unit tests and builds the signed APK.
 3. Creates the tag `v<version>` and a GitHub Release with

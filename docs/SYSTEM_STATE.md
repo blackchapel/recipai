@@ -109,7 +109,7 @@ independent review, the user's device test).
   GETs `api.github.com/repos/blackchapel/recipai/releases/latest`
   anonymously (public repo, 60 requests/hour/network; `UpdateChecker.REPO`
   is the one place the repository name lives), parses the tag
-  (`v<major>.<minor>.<patch>`, as the Production Release workflow
+  (`v<major>.<minor>.<patch>`, as the Android Production Release workflow
   writes it) and compares numbers with the installed `VERSION_NAME` (a
   test build `0.1-branch.sha` counts as `0.1.0`). Newer ->
   `availableUpdate` is set and Settings shows a card at the top; its tap
@@ -165,7 +165,7 @@ independent review, the user's device test).
   `DESIGN.md`, "Haptics").
 - The approved prototype `docs/design/recipai-prototype.html` remains
   the design reference.
-- The release pipeline (below), `app/version.properties`
+- The release pipeline (below), `android/version.properties`
   (`VERSION_NAME=0.1`; nothing has been released yet, so the modules'
   MINOR bumps are folded into the first release), and the docs.
 
@@ -272,6 +272,27 @@ FOREGROUND_SERVICE and FOREGROUND_SERVICE_SPECIAL_USE (the timer
 service), WAKE_LOCK (timers with the screen off), VIBRATE (haptics). No
 storage permission: photos come through the system photo picker.
 
+## Repository layout
+
+The repository holds several projects side by side:
+
+- `android/` -- the Android app. Gradle project `:app`: `settings.gradle.kts`
+  maps it to this folder, so task paths (`:app:...`) did not change when it
+  moved from `app/`.
+- `core/` -- shared pure-Kotlin module `:core` (below).
+- `website/` -- the public site (below, "Website").
+- `tools/desktop-check/` -- the Compose Desktop harness; it reads
+  `android/src` and `core/` by relative path.
+- `docs/`, `third_party/`, `.github/`.
+- `server/` (planned) -- the AI import service. It would be a Kotlin module
+  in the same Gradle build, reusing `:core`, with its own CI and deploy
+  workflows; it would not publish GitHub Releases (the app's update check
+  reads the latest release and expects the app's `v<major>.<minor>.<patch>`
+  tag).
+
+Workflows: `build-apk.yml` (**Android Test Release**), `release.yml`
+(**Android Production Release**), `website.yml` (**Website**).
+
 ## Module map
 
 `core/` -- **pure Kotlin JVM module, no Android imports.** Unit-tested
@@ -324,7 +345,7 @@ Note: `:core` does network I/O (plain `java.net`) for link import and
 Drive, so it can be unit-tested on the JVM; the plan had put fetching in
 `platform/net`, which is now a thin Android wrapper.
 
-`app/src/main/java/com/blackchapel/recipai/`
+`android/src/main/java/com/blackchapel/recipai/`
 
 - `MainActivity.kt` -- edge-to-edge, provides haptics, hosts
   `RecipaiApp`, routes `ACTION_SEND` text to `handleSharedText`. It is
@@ -370,7 +391,7 @@ Drive, so it can be unit-tested on the JVM; the plan had put fetching in
   `BackupConsentHost`, `BackupScheduler`, `BackupWorker`).
 
 `tools/desktop-check/` -- compiles the shared code against Compose
-Desktop 1.7.0 and runs `:core` and `app/src/test` on the JVM, for
+Desktop 1.7.0 and runs `:core` and `android/src/test` on the JVM, for
 sandboxes without the Android SDK. Android-only files are excluded from
 the app's sources; each one shared code calls has a same-API stub at the
 same package path under `stubs/`.
@@ -379,7 +400,7 @@ Unit tests: `core/src/test` (scaling, quantities, parser, tags, library,
 JSON, recipe draft, timers, ingredient uses, chime, photos, photo store,
 JSON-LD reader, page reader, HTML text and links, page fetcher against a
 local HTTP server, backup archive, engine, snapshot, timing, Drive
-client against a fake Drive) and `app/src/test` (`RecipeRepositoryTest`,
+client against a fake Drive) and `android/src/test` (`RecipeRepositoryTest`,
 `HapticPatternsTest`, `RowSwipeTest`, `EditorFlowTest`,
 `LinkImportTest`, `TimerStoreTest`, `BackupJobsTest`,
 `IntegrationFlowTest`); the `:core` and `:ui` totals are 171 and 60.
@@ -466,7 +487,7 @@ and terms of service that Google's OAuth consent screen links to.
 Two manual (`workflow_dispatch`) workflows, mirroring the RideLink repo.
 Neither runs automatically; merging to `main` releases nothing.
 
-**Test Release** -- `.github/workflows/build-apk.yml`
+**Android Test Release** -- `.github/workflows/build-apk.yml`
 - Input: `branch`. Builds a signed APK from that branch.
 - Version name: `<MAJOR.MINOR>-<branch>.<shortsha>`; version code: the
   commit count of that branch.
@@ -474,7 +495,7 @@ Neither runs automatically; merging to `main` releases nothing.
 - Uploads the APK as a workflow artifact named
   `recipai-test-<branch>-<version>`. Does not tag or publish.
 
-**Production Release** -- `.github/workflows/release.yml`
+**Android Production Release** -- `.github/workflows/release.yml`
 - Fails immediately unless run on `main`.
 - Version name: `<MAJOR.MINOR>.<PATCH>` where PATCH is one more than the
   highest existing `v<MAJOR.MINOR>.*` tag (0 if none). Refuses to reuse
@@ -496,13 +517,13 @@ link vanish from the Discord message. RideLink never hit it because its
 repo name matches no secret.
 
 **Contract the Gradle project must honor** (the workflows depend on it):
-- `app/version.properties` with `VERSION_NAME=MAJOR.MINOR`.
+- `android/version.properties` with `VERSION_NAME=MAJOR.MINOR`.
 - `-PappVersionCode` and `-PappVersionName` override `versionCode` /
   `versionName` (local builds fall back to `1` and the file's value).
 - The `release` signing config reads `KEYSTORE_PATH`,
   `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD` from the environment.
 - `./gradlew :core:test testDebugUnitTest` and `./gradlew assembleRelease` work and
-  write `app/build/outputs/apk/release/app-release.apk`.
+  write `android/build/outputs/apk/release/app-release.apk`.
 
 Differences from RideLink's pipeline (everything else, including the
 Discord steps, is the same text): the production workflow refuses to run
