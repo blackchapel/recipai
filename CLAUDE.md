@@ -107,14 +107,29 @@ release time (release time only ever adds the automatic patch number on top
 of whatever MAJOR.MINOR is currently checked in). While the app is
 pre-1.0 the base is `0.x`; moving to `1.0` is the user's call.
 
-## Release notes: label PRs so they land in the right section
+## Changelog and release notes
 
-`.github/release.yml` categorizes the auto-generated release notes by PR
-label. When opening a PR, apply whichever of `feature`/`enhancement`,
-`fix`/`bug`, `documentation`/`docs`, or
-`chore`/`maintenance`/`dependencies`/`ci` actually describes it -- an
-unlabeled PR just falls into "Other Changes", which is a worse release
-note, not a hard failure.
+The release notes are **hand-written in `CHANGELOG.md`**, not derived from PR
+titles (GitHub's auto-notes only list merged PRs, which says little when a
+PR is big).
+
+- Every PR that adds, changes or fixes something a user would notice adds
+  a line under `## Unreleased` in `CHANGELOG.md`, in plain words for the
+  people using the app (groups: Added, Changed, Fixed; "Project" for things
+  around the app such as the website or repository). Docs-only and
+  internal refactors can skip it.
+- **Cutting a release:** before the user runs **Android Production
+  Release**, open a small PR that renames `## Unreleased` to
+  `## <version> (<date>)` and starts a fresh empty `## Unreleased` above
+  it. `<version>` is `android/version.properties` MAJOR.MINOR plus the next
+  patch (one more than the highest `v<MAJOR.MINOR>.*` tag, or 0). The
+  workflow publishes that section as the notes and fails before building
+  if it is missing.
+- GitHub's generated "What's Changed" PR list is added below the notes.
+  `.github/release.yml` groups it by PR label, so still apply whichever of
+  `feature`/`enhancement`, `fix`/`bug`, `documentation`/`docs`, or
+  `chore`/`maintenance`/`dependencies`/`ci` actually describes the PR (an
+  unlabeled PR lands in "Other Changes").
 
 ## Secrets
 

@@ -500,9 +500,15 @@ Neither runs automatically; merging to `main` releases nothing.
 - Version name: `<MAJOR.MINOR>.<PATCH>` where PATCH is one more than the
   highest existing `v<MAJOR.MINOR>.*` tag (0 if none). Refuses to reuse
   an existing tag. Version code: the commit count of `main`.
+- Release notes come from `CHANGELOG.md`: `.github/scripts/release-notes.sh`
+  extracts the `## <version>` section (checked right after the version is
+  computed, so a missing or empty section fails the run before the build),
+  and it becomes the release body. GitHub's generated "What's Changed" PR
+  list (grouped by PR label via `.github/release.yml`) follows it. Auto-notes
+  alone were not enough: they list merged PRs only, and the first release was
+  one big PR.
 - Runs `:core:test testDebugUnitTest`, `assembleRelease`, then creates the GitHub
-  Release `v<version>` with generated notes (grouped by PR label via
-  `.github/release.yml`) and the APK `recipai-v<version>.apk` attached.
+  Release `v<version>` and attaches the APK `recipai-v<version>.apk`.
 
 Both post the same Discord embed as RideLink's (title, version and
 code, branch, commit, artifact link). The step is identical to
