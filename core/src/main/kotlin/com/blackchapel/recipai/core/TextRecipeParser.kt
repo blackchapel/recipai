@@ -51,6 +51,12 @@ object TextRecipeParser : RecipeImporter {
         "(jump to recipe|print recipe|pin recipe|pin it|skip to content|rate this recipe|leave a (comment|review)|did you make this|tag us|share this|advertisement|sponsored|subscribe|newsletter|cook mode|prevent your screen|save recipe|★|☆|\\b\\d+\\s+(reviews?|ratings?|comments?)\\b|»|›|^(course|cuisine|keyword|author|calories)\\s*:|^recipe by\\b)",
         i,
     )
+    // The Recipai text format's extra lines (docs/SYSTEM_STATE.md, "AI chat prompt"): a
+    // chat assistant asked for that format writes them, and they are honoured wherever they appear.
+    private val tagsLine = Regex("^tags?\\s*:\\s*(.+)$", i)
+    private val sourceLine = Regex("^source\\s*:\\s*(.+)$", i)
+    private val servingsLabelRe = Regex("^servings\\s*:\\s*\\d+\\s+([A-Za-z][A-Za-z -]{1,23})$", i)
+    private val plainServingsLabels = setOf("servings", "serving", "people", "persons", "portions", "portion")
     private val metaTime = Regex("\\b(prep|cook|total|active|inactive)\\s*time\\b", i)
     private val metaServings = Regex("\\b(?:serves|servings|yield|makes)\\s*:?\\s*(\\d+)", i)
     private val fixedVerbs = Regex("\\b(bake|roast|simmer|boil|rest|chill|refrigerate|marinate|proof|rise|steep|cool|freeze|braise|steam|soak|press|blend|preheat|poach)\\w*", i)
@@ -171,13 +177,29 @@ object TextRecipeParser : RecipeImporter {
 
     private enum class Section { PRE, AUTO, INGREDIENTS, STEPS, NOTES, SKIP }
 
+    /** "Dinner, Vegetarian, #quick" -> dinner, vegetarian, quick (at most six). */
+    private fun parseTags(raw: String): List<String> =
+        raw.split(',', ';').map(Tags::normalize).filter { it.isNotEmpty() }.distinct().take(6)
+
+    /** A link becomes "host/path" (no query, as for a link import); anything else is kept as written. */
+    private fun parseSource(raw: String): String? {
+        val text = raw.trim().trim('"', '<', '>', ' ')
+        if (text.isEmpty()) return null
+        val url = Links.findUrl(text) ?: text.takeIf { '.' in it && ' ' !in it }?.let(Links::normalize)
+        return (url?.let(Links::source) ?: text).take(120).takeIf { it.isNotBlank() }
+    }
+
     override fun parse(text: String): ParsedRecipe {
-        val lines = text.replace("\r", "").split("\n").map { it.replace("\t", " ").trim() }
+        // "**Ingredients**" and "__Method__": some chat assistants add bold markers; drop them.
+        val lines = text.replace("\r", "").split("\n").map { it.replace("\t", " ").replace("**", "").replace("__", "").trim() }
         val hasHeaders = lines.any { ingredientsHeading.containsMatchIn(it) } || lines.any { stepsHeading.containsMatchIn(it) }
         var section = Section.PRE
         var title = ""
         var description = ""
         var servings: Int? = null
+        var servingsLabel: String? = null
+        var explicitSource: String? = null
+        val explicitTags = mutableListOf<String>()
         var skipped = 0
         val ingredients = mutableListOf<ParsedIngredient>()
         val steps = mutableListOf<ParsedStep>()
@@ -186,6 +208,7 @@ object TextRecipeParser : RecipeImporter {
         for (raw in lines) {
             val line = raw.replace(Regex("\\s{2,}"), " ")
             if (line.isEmpty()) continue
+            if (line.startsWith("```")) continue // a code fence copied along with the text
             when {
                 ingredientsHeading.containsMatchIn(line) -> { section = Section.INGREDIENTS; continue }
                 stepsHeading.containsMatchIn(line) -> { section = Section.STEPS; continue }
@@ -193,8 +216,18 @@ object TextRecipeParser : RecipeImporter {
                 skipHeading.containsMatchIn(line) -> { section = Section.SKIP; continue }
                 junk.containsMatchIn(line) -> { skipped++; continue }
             }
+            val tagged = tagsLine.matchEntire(line)
+            if (tagged != null && line.length < 160) { explicitTags += parseTags(tagged.groupValues[1]); continue }
+            val sourced = sourceLine.matchEntire(line)
+            if (sourced != null && line.length < 300) { explicitSource = explicitSource ?: parseSource(sourced.groupValues[1]); continue }
             val serves = metaServings.find(line)
-            if (serves != null && line.length < 60) { servings = servings ?: serves.groupValues[1].toInt(); continue }
+            if (serves != null && line.length < 60) {
+                servings = servings ?: serves.groupValues[1].toInt()
+                if (servingsLabel == null) {
+                    servingsLabel = servingsLabelRe.matchEntire(line)?.groupValues?.get(1)?.trim()?.lowercase()?.takeIf { it !in plainServingsLabels }
+                }
+                continue
+            }
             if (metaTime.containsMatchIn(line) && line.length < 80) { skipped++; continue }
             if (section == Section.SKIP) { skipped++; continue }
             if (!hasHeaders && section == Section.PRE && title.isNotEmpty() && looksLikeIngredient(line)) section = Section.AUTO
@@ -235,8 +268,14 @@ object TextRecipeParser : RecipeImporter {
             ingredients = ingredients,
             steps = steps,
             notes = notes.joinToString("\n"),
-            tags = if (title.isNotEmpty() || ingredients.isNotEmpty()) guessTags(title, ingredientText, stepText, total) else emptyList(),
+            tags = when {
+                explicitTags.isNotEmpty() -> explicitTags.distinct().take(6)
+                title.isNotEmpty() || ingredients.isNotEmpty() -> guessTags(title, ingredientText, stepText, total)
+                else -> emptyList()
+            },
             skippedLines = skipped,
+            servingsLabel = servingsLabel,
+            source = explicitSource,
         )
     }
 }

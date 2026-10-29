@@ -26,7 +26,7 @@ export const site = {
   operator: "the Recipai maintainers (blackchapel on GitHub)",
   androidPackage: "com.blackchapel.recipai",
   /** Update this when the text of a policy page changes in substance. */
-  policyUpdated: "26 October 2026",
+  policyUpdated: "29 October 2026",
   googleApiPolicyUrl: "https://developers.google.com/terms/api-services-user-data-policy",
   googlePermissionsUrl: "https://myaccount.google.com/permissions",
   driveScope: "https://www.googleapis.com/auth/drive.file",

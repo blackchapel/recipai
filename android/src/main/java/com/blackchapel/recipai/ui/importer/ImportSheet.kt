@@ -174,6 +174,7 @@ private fun TextSource(app: AppController) {
                 style = ButtonStyle.CTA,
             )
             if (clipboardEmpty) Text("The clipboard is empty. Copy a recipe first, or type it below.", style = RecipaiType.bodySmall, color = c.danger)
+            AiChatCard()
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Recipe text", style = RecipaiType.uiSmall.copy(fontSize = RecipaiType.bodySmall.fontSize), color = c.mute, modifier = Modifier.weight(1f))

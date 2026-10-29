@@ -152,6 +152,13 @@ const sections: LegalSection[] = [
           If the check fails, nothing is shown. The app never downloads or installs updates by itself; the Update card
           just opens the release page in your browser.
         </p>
+        <h3>A prompt for AI chat apps (only if you use it)</h3>
+        <p>
+          Import has an optional helper that copies a ready-made prompt to your clipboard, so you can use it in an AI chat
+          app of your choice. Recipai itself never connects to an AI service and sends nothing for this. What you give
+          that app is handled by that app and its provider under their own terms. Recipai only sees what you paste back
+          into Import, and reads it on your phone.
+        </p>
         <h3>Notifications</h3>
         <p>
           If you allow notifications, the app shows them for running timers. They are created on your phone and involve

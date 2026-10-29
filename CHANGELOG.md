@@ -11,6 +11,20 @@ notes and refuses to run if it is missing.
 
 ## Unreleased
 
+### Added
+- **Import with an AI chat:** a new card on Import > Paste text copies a
+  ready-made prompt. Paste it into ChatGPT, Claude, Gemini or any assistant
+  with your recipe's link or text. It asks you if something is missing
+  (servings, an amount, metric or US units), then replies in a format Recipai
+  reads exactly, so you can paste the reply into Import and save. Recipai
+  itself still never connects to an AI service. The same prompt is on the
+  website.
+
+### Changed
+- Pasted recipe text can now carry `Tags:`, `Source:` and `Servings: 12
+  cookies` lines, and bold markers or code fences copied from a chat are
+  ignored.
+
 ### Project
 - Added the Recipai website: a home page, a privacy policy and terms of service.
 - Reorganised the repository into separate folders for the Android app, the

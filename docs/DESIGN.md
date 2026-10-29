@@ -238,6 +238,12 @@ markers.
 Recorded so they aren't "fixed" back by accident. The prototype still
 wins everywhere else.
 
+Import
+- The Paste text tab has an "AI chat" card under the paste button (not in
+  the prototype): collapsed it reads "Messy recipe? Let an AI chat tidy
+  it"; expanded it lists four steps and a Copy the prompt button (success
+  haptic, label becomes "Copied"). It only uses the clipboard.
+
 Onboarding and updates
 - The Settings update card is new too: it only opens the GitHub
   release page; the app never downloads or installs an APK itself.

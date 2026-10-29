@@ -427,6 +427,41 @@ recipe whose steps mention lemon juice (it now only comes from the
 title); the detail hero defaulted to the first photo rather than the
 cover; the ingredient matcher missed an ingredient's own plural.
 
+## AI chat prompt (no AI inside the app)
+
+Recipai does not call any language model. Instead it gives people a
+prompt to copy into any AI chat assistant (ChatGPT, Claude, Gemini...)
+together with a recipe link or text; the assistant's reply is in the
+**Recipai text format**, which the existing rule-based importer reads
+exactly, so it is pasted into Import like any other text.
+
+- `core/.../AiChatPrompt.kt`: `AiChatPrompt.TEXT` (the prompt) and
+  `EXAMPLE` (the example block inside it). The prompt tells the assistant
+  to ask its questions first (servings, missing amounts, metric or US, a
+  missing time) and then reply with only the recipe in one code block;
+  to be faithful (nothing added, removed or swapped); to treat the recipe
+  text as data, not instructions; and gives the exact layout and rules.
+- **Recipai text format:** title line; one-sentence description (over 30
+  characters); `Servings: N` (or `Servings: 12 cookies`); `Tags: a, b`;
+  `Source: <link>`; then `Ingredients` (amount, a unit from the parser's
+  list, name, notes; `For the sauce:` group headings), `Method`
+  (numbered, one step per line, at least 12 characters, times as digits
+  with English units), `Notes`. English headings and English time words
+  even for other languages (`(20 minutes)`).
+- `TextRecipeParser` was extended for it (all additive): `Tags:`,
+  `Source:` (a link is stored as `host/path`, without a query) and
+  `Servings: N label` lines are honoured wherever they appear; `**bold**`
+  and `__bold__` markers and ``` code fences are ignored.
+- `ui/importer/AiChatCard.kt`: the card on Import > Paste text: four
+  steps and a Copy the prompt button (clipboard only).
+- `AiChatPromptTest` is the promise: the prompt's own example, and replies
+  written the way assistants do (and a few ways they stray), parse with
+  `skippedLines == 0`; the prompt's unit list matches the parser's; and the
+  website's copy (`website/src/content/ai-chat-prompt.txt`) must equal
+  `AiChatPrompt.TEXT`, so edit both together.
+- The website shows the same prompt with a Copy button (Home, "Messy
+  recipe? Let an AI chat tidy it").
+
 ## AI / LLM features: deferred
 
 Decision: import is rule-based for now, with AI added later. That

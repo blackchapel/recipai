@@ -54,6 +54,12 @@ The Android app and `core` build together from the repository root
 - **Cook mode:** one step at a time in large type, the scaled
   ingredients that step uses, a big timer button, swipe between steps,
   and the screen kept on.
+- **Import with an AI chat (optional):** a card on the Paste text tab
+  copies a ready-made prompt. Paste it into ChatGPT, Claude, Gemini or
+  any assistant with your recipe's link or text; it asks if something
+  is missing and replies in the "Recipai text format", which Import
+  reads exactly (nothing dropped). Recipai itself never connects to an
+  AI service. The same prompt is on the website.
 - **Import:** paste recipe text and watch the parsed recipe update as
   you type, or paste a recipe page link and tap Convert. Share a page to
   Recipai from any browser or app and it converts on its own. Recipai

@@ -199,6 +199,15 @@ part of the change that touches them -- see `CLAUDE.md`.
 
 ## Import
 
+- **The AI chat prompt cannot force an assistant to follow the format.**
+  Good assistants do; a reply that strays (bullets, a time in words, a
+  step over several lines) imports with the parser's usual tolerance, and
+  the live preview shows what was read ("Skipped N lines" flags dropped
+  text). The format's headings and time words are English only; for other
+  languages the prompt asks for times in English brackets. An assistant that
+  cannot open links must be given the recipe text.
+- **Nothing in the app checks that a reply followed the format** beyond
+  the preview; there is no "this doesn't look like Recipai format" warning.
 - **No AI in import (deliberate, for now).** Messy text, social-media
   captions and photos of recipes are handled only as well as the rules
   allow; photos of recipes aren't supported at all. LLM support is

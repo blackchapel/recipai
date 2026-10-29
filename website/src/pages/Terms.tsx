@@ -106,7 +106,8 @@ const sections: LegalSection[] = [
         <span>
           Scaled amounts, converted units and step times are aids, not instructions you must follow blindly. Cooking
           times and doneness don't always scale in a straight line, and imported recipes may contain mistakes. You are
-          responsible for food safety, allergens, and checking that a dish is cooked through before you serve it.
+          responsible for food safety, allergens, and checking that a dish is cooked through before you serve it. A recipe
+          you convert with an AI chat assistant can contain mistakes too: check its amounts and times before you cook.
         </span>
       </p>
     ),

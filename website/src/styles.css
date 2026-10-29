@@ -1257,3 +1257,57 @@ ol {
     animation: none !important;
   }
 }
+
+/* ---- the AI chat prompt ---- */
+.chat {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 48px;
+  align-items: start;
+}
+.chat h2 {
+  font-size: clamp(30px, 4.2vw, 44px);
+}
+.chat > div > p {
+  margin-top: 16px;
+  max-width: 54ch;
+}
+.chat .steps {
+  margin-top: 22px;
+}
+.prompt-box {
+  display: grid;
+  gap: 14px;
+}
+.prompt-box .btn {
+  justify-self: start;
+}
+.prompt-box details {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 4px 6px;
+}
+.prompt-box summary {
+  cursor: pointer;
+  padding: 12px 12px;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 15px;
+}
+.prompt-box pre {
+  margin: 0;
+  max-height: 380px;
+  overflow: auto;
+  padding: 4px 14px 16px;
+  font: 400 12.5px/1.6 var(--f-mono);
+  color: var(--body);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 880px) {
+  .chat {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}

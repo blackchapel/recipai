@@ -1,5 +1,6 @@
 import { BackupArt, ImportArt, PhoneRecipe, Sparkle } from "../components/Art";
 import { GitHubMark, Icon, type IconName } from "../components/Icon";
+import { PromptBox } from "../components/PromptBox";
 import { site } from "../config";
 import { Link } from "../router";
 
@@ -114,6 +115,43 @@ export function Home() {
               review and edit the result before anything is saved.
             </p>
           </div>
+        </div>
+      </section>
+
+      <section className="sect" id="ai-chat" aria-labelledby="ai-chat-h">
+        <div className="wrap chat">
+          <div>
+            <p className="eyebrow">Import · any AI chat</p>
+            <h2 className="display" id="ai-chat-h">Messy recipe? Let an AI chat tidy it</h2>
+            <p>
+              Copy the Recipai prompt, paste it into ChatGPT, Claude, Gemini or any assistant, and add your recipe's link or
+              text. It asks you if something is missing (servings, an amount, which units you prefer), then replies in a
+              format Recipai reads exactly. Paste the reply into Import and save.
+            </p>
+            <p>
+              Recipai doesn't connect to any AI service and sends nothing: the prompt is just text on your clipboard. What
+              you give your chat app is handled by that app.
+            </p>
+            <ol className="steps" aria-label="How to use the prompt">
+              <li>
+                <span className="p-n mono">1</span>
+                <span><b>Copy the prompt</b> here, or from Import in the app.</span>
+              </li>
+              <li>
+                <span className="p-n mono">2</span>
+                <span><b>Paste it into your AI chat</b> and add your recipe link or text.</span>
+              </li>
+              <li>
+                <span className="p-n mono">3</span>
+                <span><b>Answer its questions,</b> if it has any.</span>
+              </li>
+              <li>
+                <span className="p-n mono">4</span>
+                <span><b>Copy its reply</b> and paste it into Recipai's Import.</span>
+              </li>
+            </ol>
+          </div>
+          <PromptBox />
         </div>
       </section>
 
