@@ -123,14 +123,24 @@ publishing.
 
 ## Cutting a release
 
-Actions -> **Android Production Release** -> Run workflow, with **`main`**
+**First, the release notes.** They are written in `CHANGELOG.md`, where every
+PR has been adding lines under `## Unreleased`. Open a small PR that renames
+that heading to `## <version> (<date>)` (the version being cut: `MAJOR.MINOR`
+from `android/version.properties` plus the next patch, so `0.1.1` after
+`v0.1.0`) and starts a fresh empty `## Unreleased` above it. Merge it. The
+workflow publishes that section as the release body and stops before building
+if it is missing or empty.
+
+Then Actions -> **Android Production Release** -> Run workflow, with **`main`**
 selected as the branch. It:
 
 1. Works out the version: `MAJOR.MINOR` from `android/version.properties`
-   plus the next patch for that line (`0.1.0`, then `0.1.1`, ...).
+   plus the next patch for that line (`0.1.0`, then `0.1.1`, ...), and checks
+   that `CHANGELOG.md` has notes for it.
 2. Runs the unit tests and builds the signed APK.
-3. Creates the tag `v<version>` and a GitHub Release with
-   auto-generated notes and `recipai-v<version>.apk` attached.
+3. Creates the tag `v<version>` and a GitHub Release whose notes are the
+   `CHANGELOG.md` section, followed by GitHub's generated "What's Changed" PR
+   list, with `recipai-v<version>.apk` attached.
 4. Posts to Discord if configured.
 
 Changing MAJOR.MINOR is done in the PR that earns it (see `CLAUDE.md`),
@@ -140,6 +150,8 @@ patch 0.
 ## If something fails
 
 - **"No Gradle project"** -- the app scaffold isn't on that branch yet.
+- **"CHANGELOG.md has no notes under a heading ..."** -- do the changelog PR
+  above (the error prints the exact heading to use).
 - **"Tag ... already exists"** -- someone tagged by hand; delete the stray
   tag or bump MAJOR.MINOR.
 - **"Production releases are cut from main only"** -- re-run with `main`.

@@ -97,6 +97,16 @@ part of the change that touches them -- see `CLAUDE.md`.
   A repository secret (the key alias) has the same value as the repo
   name, so GitHub drops such outputs; the notify jobs build their links
   from the artifact id and the tag instead. Don't "simplify" that back.
+- **The changelog step in Production Release has not run for real yet.**
+  `.github/scripts/release-notes.sh` was tested locally on sample files, but
+  the workflow only exercises it when a release is cut. If the first run
+  fails there, fix it before the build part is blamed.
+- **Releasing needs one extra PR** (renaming `Unreleased` to the version in
+  `CHANGELOG.md`), and the version must be predicted correctly (next patch
+  after the highest `v<MAJOR.MINOR>.*` tag). The workflow's error message
+  prints the heading to use if it was guessed wrong.
+- **Changelog lines depend on discipline.** Nothing checks that a PR added
+  one; `CLAUDE.md` says it must.
 
 - **Test and production builds share one signing key** (as in RideLink)
   and one `applicationId`, so a test build installs over a production
