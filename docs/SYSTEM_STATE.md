@@ -452,8 +452,10 @@ exactly, so it is pasted into Import like any other text.
   `Source:` (a link is stored as `host/path`, without a query) and
   `Servings: N label` lines are honoured wherever they appear; `**bold**`
   and `__bold__` markers and ``` code fences are ignored.
-- `ui/importer/AiChatCard.kt`: the card on Import > Paste text: four
-  steps and a Copy the prompt button (clipboard only).
+- `ui/importer/AiChatCard.kt`: the card on Import > Paste text (always
+  shown, with or without text in the box): four steps, a Copy the prompt
+  button (clipboard only) and a Show the prompt toggle that displays the
+  full text.
 - `AiChatPromptTest` is the promise: the prompt's own example, and replies
   written the way assistants do (and a few ways they stray), parse with
   `skippedLines == 0`; the prompt's unit list matches the parser's; and the

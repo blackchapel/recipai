@@ -8,9 +8,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,6 +48,7 @@ fun AiChatCard(modifier: Modifier = Modifier) {
     val clipboard = LocalClipboardManager.current
     var open by remember { mutableStateOf(false) }
     var copied by remember { mutableStateOf(false) }
+    var showPrompt by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(16.dp)
     Column(
         modifier
@@ -101,6 +106,31 @@ fun AiChatCard(modifier: Modifier = Modifier) {
                     style = ButtonStyle.CTA,
                     haptic = HapticType.SUCCESS,
                 )
+                RButton(
+                    if (showPrompt) "Hide the prompt" else "Show the prompt",
+                    { showPrompt = !showPrompt },
+                    Modifier.fillMaxWidth(),
+                    icon = if (showPrompt) Ico.Up else Ico.Down,
+                    style = ButtonStyle.GHOST,
+                    small = true,
+                )
+                if (showPrompt) {
+                    // The whole prompt, to read or to select part of it. Scrolls inside its own box.
+                    SelectionContainer {
+                        Text(
+                            AiChatPrompt.TEXT.trim(),
+                            style = RecipaiType.monoSmall,
+                            color = c.body,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(max = 280.dp)
+                                .background(c.surface, RoundedCornerShape(12.dp))
+                                .border(1.dp, c.line, RoundedCornerShape(12.dp))
+                                .verticalScroll(rememberScrollState())
+                                .padding(12.dp),
+                        )
+                    }
+                }
                 Text(
                     "Recipai doesn't connect to any AI service. Whatever you give your chat app is handled by that app.",
                     style = RecipaiType.bodySmall,

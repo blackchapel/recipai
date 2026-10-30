@@ -17,8 +17,8 @@ notes and refuses to run if it is missing.
   with your recipe's link or text. It asks you if something is missing
   (servings, an amount, metric or US units), then replies in a format Recipai
   reads exactly, so you can paste the reply into Import and save. Recipai
-  itself still never connects to an AI service. The same prompt is on the
-  website.
+  itself still never connects to an AI service. You can read the full prompt
+  in the app ("Show the prompt") and on the website.
 
 ### Changed
 - Pasted recipe text can now carry `Tags:`, `Source:` and `Servings: 12

@@ -241,8 +241,10 @@ wins everywhere else.
 Import
 - The Paste text tab has an "AI chat" card under the paste button (not in
   the prototype): collapsed it reads "Messy recipe? Let an AI chat tidy
-  it"; expanded it lists four steps and a Copy the prompt button (success
-  haptic, label becomes "Copied"). It only uses the clipboard.
+  it"; expanded it lists four steps, a Copy the prompt button (success
+  haptic, label becomes "Copied") and a Show the prompt toggle that reveals
+  the full text in a scrollable, selectable box. The card stays on the tab
+  even after text is pasted. It only uses the clipboard.
 
 Onboarding and updates
 - The Settings update card is new too: it only opens the GitHub
